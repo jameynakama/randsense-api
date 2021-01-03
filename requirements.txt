@@ -3,6 +3,8 @@ psycopg2-binary>=2.8,<3.0
 django-extensions>=3.0,<=4.0
 black
 
+gunicorn
+
 djangorestframework
 markdown
 django-filter
