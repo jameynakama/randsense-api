@@ -16,10 +16,13 @@ services:
       - "8000:8000"
     depends_on:
       - db
+    env_file: env.local
   manage:
     build: .
+    entrypoint: /usr/local/bin/python /app/manage.py
     command: shell_plus
     volumes:
       - .:/app
     depends_on:
       - db
+    env_file: env.local
