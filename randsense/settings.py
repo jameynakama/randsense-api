@@ -84,7 +84,7 @@ DATABASES = {
         "NAME": "randsense",
         "USER": "randsense",
         "PASSWORD": os.environ['RANDSENSE_DB_PASSWORD'],
-        "HOST": "db",
+        "HOST": os.environ['RANDSENSE_DB_HOST'],
         "PORT": 5432,
     }
 }
