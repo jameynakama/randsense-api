@@ -1,0 +1,12 @@
+S -> IND-CLAUSE
+
+IND-CLAUSE -> NP VP
+
+NP -> DETERMINER ADJ N
+N -> ADJ noun | noun
+
+VP -> verb
+
+DETERMINER -> det
+
+ADJ -> ADJ adj | adj

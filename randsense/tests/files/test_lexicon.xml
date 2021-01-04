@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+go - verb - irregular
+jump - verb
+junction - noun
+subannual - adj
+this - demonstrative pronoun
+-->
+<lexRecords>
+    <lexRecord>
+        <base>go</base>
+        <eui>E0030073</eui>
+        <cat>verb</cat>
+        <inflVars cat="verb" cit="go" eui="E0030073" infl="base" type="basic" unInfl="go">go</inflVars>
+        <inflVars cat="verb" cit="go" eui="E0030073" infl="pres1p23p" type="basic" unInfl="go">go</inflVars>
+        <inflVars cat="verb" cit="go" eui="E0030073" infl="infinitive" type="basic" unInfl="go">go</inflVars>
+        <inflVars cat="verb" cit="go" eui="E0030073" infl="pres3s" type="irreg" unInfl="go">goes</inflVars>
+        <inflVars cat="verb" cit="go" eui="E0030073" infl="past" type="irreg" unInfl="go">went</inflVars>
+        <inflVars cat="verb" cit="go" eui="E0030073" infl="pastPart" type="irreg" unInfl="go">gone</inflVars>
+        <inflVars cat="verb" cit="go" eui="E0030073" infl="presPart" type="irreg" unInfl="go">going</inflVars>
+        <verbEntry>
+            <variants>irreg|go|goes|went|gone|going|</variants>
+            <intran>intran</intran>
+            <intran>intran;part(up)</intran>
+            <intran>intran;part(out)</intran>
+            <intran>intran;part(down)</intran>
+            <intran>intran;part(by)</intran>
+            <intran>intran;part(on)</intran>
+            <intran>intran;part(together)</intran>
+            <intran>intran;part(through)</intran>
+            <intran>intran;part(without)</intran>
+            <intran>intran;part(about)</intran>
+            <intran>intran;part(around)</intran>
+            <intran>intran;part(round)</intran>
+            <intran>intran;part(along)</intran>
+            <intran>intran;part(back)</intran>
+            <intran>intran;part(off)</intran>
+            <tran>np</tran>
+            <tran>pphr(about,np)</tran>
+            <tran>pphr(about,ingcomp:subjc)</tran>
+            <tran>pphr(for,np)</tran>
+            <tran>pphr(to,np);nopass</tran>
+            <tran>pphr(into,np)</tran>
+            <tran>pphr(into,np);nopass</tran>
+            <tran>pphr(after,np)</tran>
+            <tran>pphr(off,np)</tran>
+            <tran>pphr(at,np)</tran>
+            <tran>pphr(over,np)</tran>
+            <tran>pphr(through,np)</tran>
+            <tran>pphr(against,np);nopass</tran>
+            <tran>pphr(for,np);nopass</tran>
+            <tran>pphr(at,np);nopass</tran>
+            <tran>pphr(by,np);nopass</tran>
+            <tran>pphr(on,np);part(back)</tran>
+            <tran>pphr(with,np);nopass</tran>
+            <tran>pphr(with,ingcomp:arbc);nopass</tran>
+            <tran>pphr(without,np)</tran>
+            <tran>pphr(without,ingcomp:arbc)</tran>
+            <link>adj</link>
+            <link>advbl</link>
+        </verbEntry>
+    </lexRecord>
+    <lexRecord>
+        <base>jump</base>
+        <eui>E0036298</eui>
+        <cat>verb</cat>
+        <inflVars cat="verb" cit="jump" eui="E0036298" infl="base" type="basic" unInfl="jump">jump</inflVars>
+        <inflVars cat="verb" cit="jump" eui="E0036298" infl="pres1p23p" type="basic" unInfl="jump">jump</inflVars>
+        <inflVars cat="verb" cit="jump" eui="E0036298" infl="infinitive" type="basic" unInfl="jump">jump</inflVars>
+        <inflVars cat="verb" cit="jump" eui="E0036298" infl="pres3s" type="reg" unInfl="jump">jumps</inflVars>
+        <inflVars cat="verb" cit="jump" eui="E0036298" infl="past" type="reg" unInfl="jump">jumped</inflVars>
+        <inflVars cat="verb" cit="jump" eui="E0036298" infl="pastPart" type="reg" unInfl="jump">jumped</inflVars>
+        <inflVars cat="verb" cit="jump" eui="E0036298" infl="presPart" type="reg" unInfl="jump">jumping</inflVars>
+        <verbEntry>
+            <variants>reg</variants>
+            <intran>intran</intran>
+            <tran>np</tran>
+            <tran>pphr(at,np)</tran>
+            <tran>pphr(on,np)</tran>
+            <nominalization>jump|noun|E0036299</nominalization>
+        </verbEntry>
+    </lexRecord>
+    <lexRecord>
+        <base>junction</base>
+        <eui>E0036304</eui>
+        <cat>noun</cat>
+        <inflVars cat="noun" cit="junction" eui="E0036304" infl="base" type="basic" unInfl="junction">junction</inflVars>
+        <inflVars cat="noun" cit="junction" eui="E0036304" infl="singular" type="basic" unInfl="junction">junction</inflVars>
+        <inflVars cat="noun" cit="junction" eui="E0036304" infl="plural" type="reg" unInfl="junction">junctions</inflVars>
+        <nounEntry>
+            <variants>uncount</variants>
+            <variants>reg</variants>
+        </nounEntry>
+    </lexRecord>
+    <lexRecord>
+        <base>subannual</base>
+        <eui>E0617019</eui>
+        <cat>adj</cat>
+        <spellingVars>sub-annual</spellingVars>
+        <inflVars cat="adj" cit="subannual" eui="E0617019" infl="base" type="basic" unInfl="subannual">subannual</inflVars>
+        <inflVars cat="adj" cit="subannual" eui="E0617019" infl="positive" type="basic" unInfl="subannual">subannual</inflVars>
+        <inflVars cat="adj" cit="subannual" eui="E0617019" infl="base" type="basic" unInfl="sub-annual">sub-annual</inflVars>
+        <inflVars cat="adj" cit="subannual" eui="E0617019" infl="positive" type="basic" unInfl="sub-annual">sub-annual</inflVars>
+        <adjEntry>
+            <variants>inv</variants>
+            <position type="pred"/>
+            <position type="attrib(3)"/>
+            <stative/>
+        </adjEntry>
+    </lexRecord>
+    <lexRecord>
+        <base>this</base>
+        <eui>E0060693</eui>
+        <cat>pron</cat>
+        <inflVars cat="pron" cit="this" eui="E0060693" infl="base" type="basic" unInfl="this">this</inflVars>
+        <pronEntry>
+            <variants>thr_sing</variants>
+            <type>dem</type>
+            <type>obj</type>
+            <type>subj</type>
+        </pronEntry>
+    </lexRecord>
+</lexRecords>

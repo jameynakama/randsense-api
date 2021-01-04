@@ -1,5 +1,10 @@
 from django.urls import path
 
+from rest_framework import routers
+
 from api import views
 
-urlpatterns = [path("hello/", views.hello_view, name="hello-view")]
+router = routers.SimpleRouter()
+router.register("sentences", views.SentenceViewset)
+
+urlpatterns = router.urls

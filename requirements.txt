@@ -8,3 +8,5 @@ gunicorn
 djangorestframework
 markdown
 django-filter
+
+django-json-widget

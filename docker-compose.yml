@@ -26,3 +26,14 @@ services:
     depends_on:
       - db
     env_file: env.local
+  tests:
+    build:
+      context: .
+    command: test
+    depends_on:
+      - db
+    entrypoint: /usr/local/bin/python /app/manage.py
+    restart: 'no'
+    volumes:
+      - ./:/app
+    env_file: env.tests

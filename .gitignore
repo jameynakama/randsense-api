@@ -1,3 +1,4 @@
+.DS_Store
 *.egg-info
 *.pot
 *.py[co]
@@ -13,3 +14,4 @@ tests/.coverage
 build/
 tests/report/
 
+LEXICON.xml

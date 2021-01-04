@@ -14,6 +14,8 @@ import os
 
 from pathlib import Path
 
+from randsense.parsing import parse_grammar_file
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,7 +29,7 @@ SECRET_KEY = os.environ['RANDSENSE_SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("RANDSENSE_DEBUG", False) == "True"
 
-ALLOWED_HOSTS = ["178.128.78.239", ".jamey.wtf"]
+ALLOWED_HOSTS = ["178.128.78.239", ".jamey.wtf", "localhost"]
 
 
 # Application definition
@@ -40,8 +42,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    "django_json_widget",
     "rest_framework",
     "api",
+    "randsense"
 ]
 
 MIDDLEWARE = [
@@ -81,11 +85,14 @@ WSGI_APPLICATION = "randsense.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "randsense",
+        "NAME": os.environ.get("DB_TEST_NAME", "randsense"),
         "USER": "randsense",
         "PASSWORD": os.environ['RANDSENSE_DB_PASSWORD'],
         "HOST": os.environ['RANDSENSE_DB_HOST'],
         "PORT": 5432,
+        "TEST": {
+            "NAME": os.environ.get("DB_TEST_NAME", "randsense"),
+        }
     }
 }
 
@@ -129,11 +136,16 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
-
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
-    ]
+    # "DEFAULT_PERMISSION_CLASSES": [
+    #     "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
+    # ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [],
+    'DEFAULT_PERMISSION_CLASSES': [],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 25
 }
+
+SENTENCE_GRAMMAR = parse_grammar_file()
