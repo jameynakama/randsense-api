@@ -16,6 +16,7 @@ services:
       - "8000:8000"
     depends_on:
       - db
+      - redis
     env_file: env.local
   manage:
     build: .
@@ -26,6 +27,8 @@ services:
     depends_on:
       - db
     env_file: env.local
+  redis:
+    image: redis:6.0.9
   tests:
     build:
       context: .

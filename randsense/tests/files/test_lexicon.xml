@@ -120,4 +120,31 @@ this - demonstrative pronoun
             <type>subj</type>
         </pronEntry>
     </lexRecord>
+    <lexRecord>
+        <base>coadd</base>
+        <eui>E0571470</eui>
+        <cat>verb</cat>
+        <spellingVars>co-add</spellingVars>
+        <inflVars cat="verb" cit="coadd" eui="E0571470" infl="base" type="basic" unInfl="coadd">coadd</inflVars>
+        <inflVars cat="verb" cit="coadd" eui="E0571470" infl="pres1p23p" type="basic" unInfl="coadd">coadd</inflVars>
+        <inflVars cat="verb" cit="coadd" eui="E0571470" infl="infinitive" type="basic" unInfl="coadd">coadd</inflVars>
+        <inflVars cat="verb" cit="coadd" eui="E0571470" infl="pres3s" type="reg" unInfl="coadd">coadds</inflVars>
+        <inflVars cat="verb" cit="coadd" eui="E0571470" infl="past" type="reg" unInfl="coadd">coadded</inflVars>
+        <inflVars cat="verb" cit="coadd" eui="E0571470" infl="pastPart" type="reg" unInfl="coadd">coadded</inflVars>
+        <inflVars cat="verb" cit="coadd" eui="E0571470" infl="presPart" type="reg" unInfl="coadd">coadding</inflVars>
+        <inflVars cat="verb" cit="coadd" eui="E0571470" infl="base" type="basic" unInfl="co-add">co-add</inflVars>
+        <inflVars cat="verb" cit="coadd" eui="E0571470" infl="pres1p23p" type="basic" unInfl="co-add">co-add</inflVars>
+        <inflVars cat="verb" cit="coadd" eui="E0571470" infl="infinitive" type="basic" unInfl="co-add">co-add</inflVars>
+        <inflVars cat="verb" cit="coadd" eui="E0571470" infl="pres3s" type="reg" unInfl="co-add">co-adds</inflVars>
+        <inflVars cat="verb" cit="coadd" eui="E0571470" infl="past" type="reg" unInfl="co-add">co-added</inflVars>
+        <inflVars cat="verb" cit="coadd" eui="E0571470" infl="pastPart" type="reg" unInfl="co-add">co-added</inflVars>
+        <inflVars cat="verb" cit="coadd" eui="E0571470" infl="presPart" type="reg" unInfl="co-add">co-adding</inflVars>
+        <verbEntry>
+            <variants>reg</variants>
+            <intran>intran</intran>
+            <tran>np</tran>
+            <ditran>np,pphr(to,np)</ditran>
+            <nominalization>coaddition|noun|E0571469</nominalization>
+        </verbEntry>
+    </lexRecord>
 </lexRecords>

@@ -1,0 +1,38 @@
+[
+{
+  "model": "randsense.specialword",
+  "pk": 1,
+  "fields": {
+    "base": ",",
+    "category": "special",
+    "inflections": {},
+    "attributes": {
+      "comma": true
+    }
+  }
+},
+{
+  "model": "randsense.specialword",
+  "pk": 2,
+  "fields": {
+    "base": ";",
+    "category": "special",
+    "inflections": {},
+    "attributes": {
+      "semicolon": true
+    }
+  }
+},
+{
+  "model": "randsense.specialword",
+  "pk": 3,
+  "fields": {
+    "base": ":",
+    "category": "special",
+    "inflections": {},
+    "attributes": {
+      "colon": true
+    }
+  }
+}
+]

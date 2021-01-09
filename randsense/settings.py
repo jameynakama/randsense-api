@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     "django_json_widget",
+    "polymorphic",
     "rest_framework",
     "api",
     "randsense"
@@ -146,6 +147,16 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 25
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
 }
 
 SENTENCE_GRAMMAR = parse_grammar_file()

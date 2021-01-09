@@ -48,7 +48,7 @@ def parse_grammar_file():
     return grammar
 
 
-def get_sentence_diagram(starting_point):
+def get_sentence_diagram(starting_point="S"):
     """Create a random sentence diagram"""
     def go(level):
         if level in settings.SENTENCE_GRAMMAR:
@@ -71,6 +71,7 @@ def get_sentence_diagram(starting_point):
         else:
             if level != '_':
                 result.append(level)
+                print(result)
 
     result = []
     go(starting_point)

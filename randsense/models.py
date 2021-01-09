@@ -1,29 +1,45 @@
-import hashlib
-import os
+import json
 import random
-from collections import defaultdict
 
-from django.db import models
-from django.core.cache import cache
-from django.conf import settings
+from django.core import serializers
 from django.contrib.postgres import fields
+from django.db import models
+from django.utils.functional import cached_property
 
 from randsense import parsing
 
-# TODO
-# Needs to be A LOT faster, rework DB structure
-# Figure out queries for sub types of words (tran verb, adv mod, etc.)
+
+# categories: {'adv', 'conj', 'pron', 'aux', 'adj', 'verb', 'noun', 'det', 'modal', 'prep'}
+def get_word_class(category):
+    class_map = {
+        "noun": Noun,
+        "verb": Verb,
+        "adj": Adjective,
+        "adv": Adverb,
+        "conj": Conjunction,
+        "pron": Pronoun,
+        "aux": Auxiliary,
+        "prep": Preposition,
+        "special": SpecialWord
+    }
+    if ":" in category:
+        category = category[:category.index(":")]
+    return class_map.get(category, GenericWord)
 
 
 class Sentence(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    base = models.TextField(null=True, blank=True)
+    base = models.JSONField(default=list, blank=True)
     diagram = fields.ArrayField(models.CharField(max_length=255), null=True, blank=True)
     inflected = models.TextField(null=True, blank=True)
 
     is_correct = models.BooleanField(default=True)
+
+    @cached_property
+    def words(self):
+        return " ".join(word["fields"]["base"] for word in self.base)
 
     class Meta:
         ordering = ('-created',)
@@ -37,40 +53,48 @@ class Sentence(models.Model):
         sentence = Sentence()
         sentence.get_random_diagram()
         sentence.fill_in_base_words()
+        sentence.inflect()
         sentence.save()
         return sentence
 
     def get_random_diagram(self):
         # TODO Test
-        self.diagram = parsing.get_sentence_diagram("S")
+        self.diagram = parsing.get_sentence_diagram()
 
     def fill_in_base_words(self):
-        base = []
-        for pos in self.diagram:
-            if "_" in pos:
-                new_word = Word.objects.random(category=pos[:pos.index("_")], additional=pos[pos.index("_") + 1:])
-            else:
-                new_word = Word.objects.random(category=pos)
-            # technical_sentence.append(new_word)
-            base.append(new_word.base)
-            self.base = " ".join(base)
+        for category in self.diagram:
+            new_word = self.get_random_word(category=category)
+            serialized_word = serializers.serialize("json", [new_word])
+            word_json = json.loads(serialized_word)[0]
+            self.base.append(word_json)
 
+    def inflect(self):
+        pass
 
-class WordManager(models.Manager):
-    def random(self, **kwargs):
+    @classmethod
+    def get_random_word(cls, category):
         # TODO Caching or better queries
-        if 'additional' in kwargs:
-            kwargs[kwargs['additional']] = True
-            del kwargs['additional']
-        choices = Word.objects.filter(**kwargs)
-        return random.choice(choices)
+        klass = get_word_class(category)
 
+        if ":" in category:
+            base_type, specific_type = category.split(":", 1)
+            choices = klass.objects.filter(category=base_type, **{f"attributes__{specific_type}__isnull": False})
+        else:
+            choices = klass.objects.filter(category=category)
 
-def default_data_json():
-    return {
-        "inflections": {},
-        "attributes": {}
-    }
+        earliest_pk = int(choices.earliest("pk").pk)
+        latest_pk = int(choices.latest("pk").pk)
+
+        choice = None
+
+        while choice is None:
+            pk = random.randint(earliest_pk, latest_pk)
+            try:
+                choice = choices.get(pk=pk)
+            except klass.DoesNotExist:
+                pass
+
+        return choice
 
 
 class Word(models.Model):
@@ -78,50 +102,53 @@ class Word(models.Model):
         # TODO figure out if there's a way to do unique
         # unique_together = ["base", "category"]
         ordering = ["-base"]
-
-    objects = WordManager()
-
-    base = models.CharField(max_length=255)
-    category = models.CharField(max_length=255)
-
-    data = models.JSONField(default=default_data_json)
-
-    # # verbs
-    # past = models.CharField(max_length=255, blank=True)
-    # past_participle = models.CharField(max_length=255, blank=True)
-    # present_participle = models.CharField(max_length=255, blank=True)
-    # present3s = models.CharField(max_length=255, blank=True)
-    # transitive = models.BooleanField(blank=True)
-    # intransitive = models.BooleanField(blank=True)
-    # ditransitive = models.BooleanField(blank=True)
-    # linking = models.BooleanField(blank=True)
-    #
-    # # nouns
-    # plural = models.CharField(max_length=255, blank=True)
-    # noncount = models.BooleanField(blank=True)
-    # place = models.BooleanField(blank=True)
-    # person = models.BooleanField(blank=True)
-    # demon = models.BooleanField(blank=True)
-    #
-    # # adjectives
-    # predicative = models.BooleanField(blank=True)
-    # qualitative = models.BooleanField(blank=True)
-    # classifying = models.BooleanField(blank=True)
-    # comparative = models.BooleanField(blank=True)
-    # superlative = models.BooleanField(blank=True)
-    # color = models.BooleanField(blank=True)
-    #
-    # # adverbs
-    # sentence_modifier = models.BooleanField(blank=True)
-    # verb_modifier = models.BooleanField(blank=True)
-    # intensifier = models.BooleanField(blank=True)
-    #
-    # # determiners
-    # is_plural = models.BooleanField(blank=True)
-    # coordinating = models.BooleanField(blank=True)
-    #
-    # # other
-    # and_literal = models.BooleanField(blank=True)
+        abstract = True
 
     def __str__(self):
         return f"<{self.base} - {self.category}>"
+
+    base = models.CharField(max_length=255)
+    category = models.CharField(max_length=255, db_index=True)
+
+    inflections = models.JSONField(default=dict, blank=True)
+    attributes = models.JSONField(default=dict, blank=True)
+
+
+class SpecialWord(Word):
+    pass
+
+
+class GenericWord(Word):
+    pass
+
+
+class Noun(Word):
+    pass
+
+
+class Verb(Word):
+    pass
+
+
+class Adverb(Word):
+    pass
+
+
+class Adjective(Word):
+    pass
+
+
+class Conjunction(Word):
+    pass
+
+
+class Pronoun(Word):
+    pass
+
+
+class Auxiliary(Word):
+    pass
+
+
+class Preposition(Word):
+    pass
