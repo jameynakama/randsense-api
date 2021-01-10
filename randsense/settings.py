@@ -14,7 +14,7 @@ import os
 
 from pathlib import Path
 
-from randsense.parsing import parse_grammar_file
+from randsense.util.parsing import parse_grammar_file
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

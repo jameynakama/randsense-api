@@ -1,10 +1,10 @@
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 
 from rest_framework import mixins, status, viewsets
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 
-from randsense.parsing import get_sentence_diagram
+from randsense.util.parsing import get_sentence_diagram
 from randsense import models, serializers
 
 

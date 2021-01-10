@@ -26,7 +26,7 @@ def parse_grammar_file():
     #     )
     # self.base_sentence_type = random.choice(possible_types)
 
-    data = open(os.path.join(os.path.dirname(__file__), 'grammar.txt'), 'r').read().split('\n')
+    data = open(os.path.join(os.path.dirname(__file__), '../grammar.txt'), 'r').read().split('\n')
 
     processed_data = []
 

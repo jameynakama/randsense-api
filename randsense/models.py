@@ -6,7 +6,7 @@ from django.contrib.postgres import fields
 from django.db import models
 from django.utils.functional import cached_property
 
-from randsense import inflections, parsing, query_schema
+from randsense.util import inflections, query_builder, parsing
 
 
 # categories: {'adv', 'conj', 'pron', 'aux', 'adj', 'verb', 'noun', 'det', 'modal', 'prep'}
@@ -76,9 +76,9 @@ class Sentence(models.Model):
 
     @classmethod
     def get_random_word(cls, category):
-        category, specific_type = query_schema.get_category_and_type(category)
+        category, specific_type = query_builder.get_category_and_type(category)
         klass = get_word_class(category)
-        query = query_schema.get_query_for_category(klass, specific_type=specific_type)
+        query = query_builder.get_query_for_category(klass, specific_type=specific_type)
 
         earliest_pk = int(query.earliest("pk").pk)
         latest_pk = int(query.latest("pk").pk)
