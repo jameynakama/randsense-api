@@ -6,7 +6,7 @@ from django.contrib.postgres import fields
 from django.db import models
 from django.utils.functional import cached_property
 
-from randsense import inflections, parsing, query_schema
+from randsense.util import inflections, query_builder, parsing
 
 
 # categories: {'adv', 'conj', 'pron', 'aux', 'adj', 'verb', 'noun', 'det', 'modal', 'prep'}
@@ -27,6 +27,29 @@ def get_word_class(category):
     if ":" in category:
         category = category[:category.index(":")]
     return class_map.get(category, GenericWord)
+
+
+class Singleton(models.Model):
+    class Meta:
+        abstract = True
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        pass
+
+    @classmethod
+    def load(cls):
+        obj, created = cls.objects.get_or_create(pk=1)
+        return obj
+
+
+class ApiSettings(Singleton):
+    class Meta:
+        verbose_name_plural = "API Settings"
+    base_word_frequency = models.BigIntegerField(default=1000000)
 
 
 class Sentence(models.Model):
@@ -71,14 +94,19 @@ class Sentence(models.Model):
             self.base.append(word_json)
 
     def inflect(self):
-        self.inflected = inflections.inflect(self.diagram, self.base)
+        inflected_words = inflections.inflect(self)
+        ending_punctuation = "?" if inflected_words[0] in ["what", "which"] else "."
+        self.inflected = (" ".join(inflected_words)).capitalize()
+        self.inflected += ending_punctuation
         self.save()
 
     @classmethod
     def get_random_word(cls, category):
-        category, specific_type = query_schema.get_category_and_type(category)
+        category, specific_type = query_builder.get_category_and_type(category)
         klass = get_word_class(category)
-        query = query_schema.get_query_for_category(klass, specific_type=specific_type)
+        base_word_frequency = ApiSettings.load().base_word_frequency
+        query = query_builder.get_query_for_category(klass, specific_type=specific_type)\
+            .filter(active=True, rank__gt=base_word_frequency) # TODO make this fancy or at least a setting
 
         earliest_pk = int(query.earliest("pk").pk)
         latest_pk = int(query.latest("pk").pk)
@@ -110,6 +138,10 @@ class Word(models.Model):
 
     inflections = models.JSONField(default=dict, blank=True)
     attributes = models.JSONField(default=dict, blank=True)
+
+    rank = models.BigIntegerField(default=0)
+
+    active = models.BooleanField(default=True)
 
 
 class SpecialWord(Word):

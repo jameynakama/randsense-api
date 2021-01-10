@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from randsense import inflections
+from randsense.util import inflections
 
 WORDS = {
     "a": {

@@ -3,14 +3,17 @@ S -> IND-CLAUSE
 IND-CLAUSE -> NP VP
 
 # NP -> possessive-pronoun N | DETERMINER ADJ N | nominative-pronoun | proper-noun 0.4
-NP -> N | DETERMINER ADJ N
+# NP -> DETERMINER N | DETERMINER ADJ N
+NP -> DETERMINER N | DETERMINER ADJ N
 
 # VP -> verb_intransitive | verb_transitive DObj | verb_linking DObj 0.7
-VP -> verb:intran | verb:tran N | verb:link N
+# VP -> verb:intran | verb:tran N | verb:link N
+VP -> verb:intran
 
 # DETERMINER -> det | indefinite-article
 DETERMINER -> det
 
 N -> ADJ noun | noun
 
-ADJ -> ADJ adj | adj
+# ADJ -> ADJ adj | adj
+ADJ -> adj

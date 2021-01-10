@@ -79,8 +79,9 @@ class SpecialWordAdmin(admin.ModelAdmin):
 
 @admin.register(models.Determiner)
 class DeterminerAdmin(admin.ModelAdmin):
-    list_display = ["base"]
+    list_display = ["base", "active"]
     search_fields = ["base"]
+    list_editable = ["active"]
     formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
 
 
@@ -89,3 +90,12 @@ class ModalAdmin(admin.ModelAdmin):
     list_display = ["base"]
     search_fields = ["base"]
     formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
+
+
+@admin.register(models.ApiSettings)
+class SettingsAdmin(admin.ModelAdmin):
+    list_display = ["name", "base_word_frequency"]
+    list_editable = ["base_word_frequency"]
+
+    def name(self, obj):
+        return "Edit"

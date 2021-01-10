@@ -1,10 +1,11 @@
-from django.http import HttpResponse, Http404
+import json
+
+from django.http import HttpResponse
 
 from rest_framework import mixins, status, viewsets
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 
-from randsense.parsing import get_sentence_diagram
 from randsense import models, serializers
 
 
@@ -30,7 +31,15 @@ class SentenceViewset(mixins.RetrieveModelMixin,
     queryset = models.Sentence.objects.all()
     serializer_class = serializers.SentenceSerializer
 
+    def create(self, request, *args, **kwargs):
+        sentence = models.Sentence.create_random_sentence()
+        inflected = sentence.inflected
+        # return HttpResponse(' '.join(word['fields']['base'] for word in sentence.base))
 
-def hello_view(request):
-    diagram = get_sentence_diagram("S")
-    return HttpResponse(" ".join(diagram))
+        data = {
+            'sentence': sentence.inflected,
+            'diagram': sentence.diagram,
+            'full_data': self.serializer_class(sentence).data
+        }
+
+        return HttpResponse(json.dumps(data))

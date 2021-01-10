@@ -14,7 +14,7 @@ import os
 
 from pathlib import Path
 
-from randsense.parsing import parse_grammar_file
+from randsense.util.parsing import parse_grammar_file
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,12 +43,14 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     "django_json_widget",
+    "corsheaders",
     "rest_framework",
     "api",
     "randsense"
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -162,4 +164,11 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 25
 }
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:8000",
+]
+
 SENTENCE_GRAMMAR = parse_grammar_file()
+
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
