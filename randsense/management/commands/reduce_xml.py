@@ -1,8 +1,11 @@
-from xml.dom import minidom
+import logging
 import xml.etree.ElementTree as xml
 from xml.etree import ElementTree as ET
 
 from django.core.management.base import BaseCommand
+
+
+logger = logging.getLogger(__name__)
 
 
 # categories: {'adv', 'conj', 'pron', 'aux', 'adj', 'verb', 'noun', 'det', 'modal', 'prep'}
@@ -42,7 +45,7 @@ class Command(BaseCommand):
                     # import ipdb; ipdb.set_trace(context=20)
                     if element.find("cat").text in CATEGORIES_TO_ALWAYS_SAVE:
                         # Write it if its in a category to always save
-                        print(f"Saved at {i} because {element.find('cat').text}")
+                        logger.info(f"Saved at {i} because {element.find('cat').text}")
                         outfile.write(ET.tostring(element).decode())
                         wrote += 1
                         # And don't increment the index
@@ -51,7 +54,7 @@ class Command(BaseCommand):
                         # Save every nth item no matter what
                         i += 1
                         if i % options["save_every"] == 0:
-                            print(f"Saved at {i} - {element.find('cat').text}")
+                            logger.info(f"Saved at {i} - {element.find('cat').text}")
                             outfile.write(ET.tostring(element).decode())
                             wrote += 1
 
@@ -60,4 +63,4 @@ class Command(BaseCommand):
 
                 outfile.write("</lexRecords>\n")
 
-        print(f"Wrote {wrote} records from {total} total")
+        logger.info(f"Wrote {wrote} records from {total} total")

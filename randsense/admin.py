@@ -75,3 +75,17 @@ class SpecialWordAdmin(admin.ModelAdmin):
     list_display = ["base"]
     search_fields = ["base"]
     formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
+
+
+@admin.register(models.Determiner)
+class DeterminerAdmin(admin.ModelAdmin):
+    list_display = ["base"]
+    search_fields = ["base"]
+    formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
+
+
+@admin.register(models.Modal)
+class ModalAdmin(admin.ModelAdmin):
+    list_display = ["base"]
+    search_fields = ["base"]
+    formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}

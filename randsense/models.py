@@ -6,8 +6,7 @@ from django.contrib.postgres import fields
 from django.db import models
 from django.utils.functional import cached_property
 
-from randsense import inflections
-from randsense import parsing
+from randsense import inflections, parsing, query_schema
 
 
 # categories: {'adv', 'conj', 'pron', 'aux', 'adj', 'verb', 'noun', 'det', 'modal', 'prep'}
@@ -21,6 +20,8 @@ def get_word_class(category):
         "pron": Pronoun,
         "aux": Auxiliary,
         "prep": Preposition,
+        "det": Determiner,
+        "modal": Modal,
         "special": SpecialWord
     }
     if ":" in category:
@@ -70,30 +71,24 @@ class Sentence(models.Model):
             self.base.append(word_json)
 
     def inflect(self):
-        inflector = inflections.Inflector()
-        self.inflected = inflector.inflect(self.diagram, self.base)
+        self.inflected = inflections.inflect(self.diagram, self.base)
         self.save()
 
     @classmethod
     def get_random_word(cls, category):
-        # TODO Caching or better queries
+        category, specific_type = query_schema.get_category_and_type(category)
         klass = get_word_class(category)
+        query = query_schema.get_query_for_category(klass, specific_type=specific_type)
 
-        if ":" in category:
-            base_type, specific_type = category.split(":", 1)
-            choices = klass.objects.filter(category=base_type, **{f"attributes__{specific_type}__isnull": False})
-        else:
-            choices = klass.objects.filter(category=category)
-
-        earliest_pk = int(choices.earliest("pk").pk)
-        latest_pk = int(choices.latest("pk").pk)
+        earliest_pk = int(query.earliest("pk").pk)
+        latest_pk = int(query.latest("pk").pk)
 
         choice = None
 
         while choice is None:
             pk = random.randint(earliest_pk, latest_pk)
             try:
-                choice = choices.get(pk=pk)
+                choice = query.get(pk=pk)
             except klass.DoesNotExist:
                 pass
 
@@ -104,7 +99,7 @@ class Word(models.Model):
     class Meta:
         # TODO figure out if there's a way to do unique
         # unique_together = ["base", "category"]
-        ordering = ["-base"]
+        ordering = ["base"]
         abstract = True
 
     def __str__(self):
@@ -154,4 +149,12 @@ class Auxiliary(Word):
 
 
 class Preposition(Word):
+    pass
+
+
+class Determiner(Word):
+    pass
+
+
+class Modal(Word):
     pass

@@ -1,4 +1,5 @@
-import os
+import logging
+import math
 import xml.etree.ElementTree as xml
 
 from django.core.management.base import BaseCommand
@@ -6,8 +7,10 @@ from django.core.management.base import BaseCommand
 from randsense import models
 
 
-# categories: {'adv', 'conj', 'pron', 'aux', 'adj', 'verb', 'noun', 'det', 'modal', 'prep'}
+logger = logging.getLogger(__name__)
 
+
+# cats {'adv', 'conj', 'pron', 'aux', 'adj', 'verb', 'noun', 'det', 'modal', 'prep'}
 """
 noun
 ['compl', 'nominalization', 'proper', 'tradeName', 'trademark', 'variants']
@@ -53,6 +56,7 @@ class Command(BaseCommand):
         tree = xml.parse(options['xml_file'])
         root = tree.getroot()
 
+        total = len(root)
         for lex_record in root:
             word = models.GenericWord()
             for line in lex_record:
@@ -74,21 +78,7 @@ class Command(BaseCommand):
                 elif line.tag == "inflVars":
                     # TODO remove
                     data[word.category]['inflections'].add(line.attrib['infl'])
-
                     word.inflections[line.attrib["infl"]] = line.text
-
-                # # Verbs
-                # elif line.tag == "verbEntry":
-                #     for entry in line:
-                #         # TODO remove
-                #         data[word.category]["attributes"].add(entry.tag)
-                #
-                #         if entry.tag != "variant":
-                #             if entry.tag not in word.attributes:
-                #                 word.attributes[entry.tag] = []
-                #             # TODO: Save the value of the tag and use it in generation
-                #             word.attributes[entry.tag] = entry.text
-
                 elif line.tag == f"{word.category}Entry":
                     for entry in line:
                         # TODO remove
@@ -97,26 +87,31 @@ class Command(BaseCommand):
 
                         # `variant` seems to be repeats of inflections
                         if entry.tag != "variant":
-                            if (
-                                    (word.category == "pron" and entry.tag == "type") or
-                                    (word.category == "det" and entry.tag == "variants")
-                            ):
-                                # Certain attributes are saved under different tags for
-                                # different categories in the NIH Specialist Lexicon
-                                word.attributes[entry.text] = True
-                            else:
-                                # Otherwise, save the text under the tag
-                                if entry.tag not in word.attributes:
-                                    word.attributes[entry.tag] = []
-                                word.attributes[entry.tag].append(entry.text)
+                            if entry.tag not in word.attributes:
+                                word.attributes[entry.tag] = []
+                            text = entry.text
+
+                            # Adverbs have further specifics we don't care about yet
+                            # like verb_modifier;manner
+                            if word.category == "adv" and entry.tag == "modification":
+                                text = entry.text.split(";")[0]
+
+                            word.attributes[entry.tag].append(text)
 
             cls = models.get_word_class(word.category)
             word.__class__ = cls
             word.save()
 
-        #     i += 1
-        #     if i % 10000 == 0:
-        #         print(f"{i} - {word.base} - {word.category}")
+            i += 1
+            one_percent = math.floor(total / 100)
+            # print(one_percent)
+            # print('---------')
+            # print(i)
+            # print(total)
+            # print(i/total)
+            # print(i % one_percent)
+            if i % one_percent == 0:
+                logger.info(f"{str((i/total)*100)[:2]}% - {word.base} - {word.category}")
         # print(f"{i} - {word.base}")
         #
         # import pprint
