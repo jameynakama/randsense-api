@@ -3,6 +3,8 @@
 *.pot
 *.py[co]
 .tox/
+htmlcov/
+.coverage
 __pycache__
 MANIFEST
 dist/

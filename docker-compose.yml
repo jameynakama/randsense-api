@@ -29,10 +29,9 @@ services:
   tests:
     build:
       context: .
-    command: test
     depends_on:
       - database
-    entrypoint: /usr/local/bin/python /app/manage.py
+    entrypoint: pytest
     restart: 'no'
     volumes:
       - ./:/app

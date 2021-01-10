@@ -12,3 +12,8 @@ django-filter
 django-json-widget
 
 ipdb
+
+pytest
+pytest-django
+pytest-cov
+pytest-dotenv
