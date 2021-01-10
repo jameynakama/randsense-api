@@ -147,4 +147,31 @@ this - demonstrative pronoun
             <nominalization>coaddition|noun|E0571469</nominalization>
         </verbEntry>
     </lexRecord>
+    <lexRecord>
+        <base>both</base>
+        <eui>E0013802</eui>
+        <cat>det</cat>
+        <inflVars cat="det" cit="both" eui="E0013802" infl="base" type="basic" unInfl="both">both</inflVars>
+        <detEntry>
+            <variants>plur</variants>
+        </detEntry>
+    </lexRecord>
+    <lexRecord>
+        <base>enough</base>
+        <eui>E0025440</eui>
+        <cat>det</cat>
+        <inflVars cat="det" cit="enough" eui="E0025440" infl="base" type="basic" unInfl="enough">enough</inflVars>
+        <detEntry>
+            <variants>pluruncount</variants>
+        </detEntry>
+    </lexRecord>
+    <lexRecord>
+        <base>every</base>
+        <eui>E0026451</eui>
+        <cat>det</cat>
+        <inflVars cat="det" cit="every" eui="E0026451" infl="base" type="basic" unInfl="every">every</inflVars>
+        <detEntry>
+            <variants>sing</variants>
+        </detEntry>
+    </lexRecord>
 </lexRecords>

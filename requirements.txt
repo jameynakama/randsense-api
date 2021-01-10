@@ -8,10 +8,7 @@ gunicorn
 djangorestframework
 markdown
 django-filter
-django-redis>=4.12,<5.0
 
 django-json-widget
 
 ipdb
-
-django-polymorphic

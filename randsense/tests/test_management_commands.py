@@ -52,3 +52,12 @@ class IngestLexiconTestCase(TestCase):
         assert "dem" in word.attributes
         assert "obj" in word.attributes
         assert "subj" in word.attributes
+
+    def test_saves_determiners(self):
+        """Should save determiners"""
+        both = models.GenericWord.objects.get(base="both")
+        enough = models.GenericWord.objects.get(base="enough")
+        every = models.GenericWord.objects.get(base="every")
+        assert "plur" in both.attributes
+        assert "pluruncount" in enough.attributes
+        assert "sing" in every.attributes

@@ -1,3 +1,4 @@
+# Randsense
         verb_types = [
             "intran",
             "tran",
@@ -18,3 +19,9 @@
             "indef(neg)",
             "indef(nonassert)",
         ]
+
+## Maintenance
+
+When adding a new class, ensure it gets put into the the models map and any management commands.
+
+Whenever changing how ingestion works, you need to re-ingest and create new test fixtures.

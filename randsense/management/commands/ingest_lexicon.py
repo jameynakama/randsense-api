@@ -97,9 +97,12 @@ class Command(BaseCommand):
 
                         # `variant` seems to be repeats of inflections
                         if entry.tag != "variant":
-                            if entry.tag == "type":
-                                # `type` specifically marks types of words
-                                # so save it as True for querying
+                            if (
+                                    (word.category == "pron" and entry.tag == "type") or
+                                    (word.category == "det" and entry.tag == "variants")
+                            ):
+                                # Certain attributes are saved under different tags for
+                                # different categories in the NIH Specialist Lexicon
                                 word.attributes[entry.text] = True
                             else:
                                 # Otherwise, save the text under the tag
@@ -111,17 +114,17 @@ class Command(BaseCommand):
             word.__class__ = cls
             word.save()
 
-            i += 1
-            if i % 10000 == 0:
-                print(f"{i} - {word.base} - {word.category}")
-        print(f"{i} - {word.base}")
-
-        import pprint
-        for key in data:
-            data[key]['attributes'] = sorted(data[key]['attributes'])
-            data[key]["tags"] = sorted(data[key]["tags"])
-            data[key]['inflections'] = sorted(data[key]['inflections'])
-        pprint.pprint(data)
-        for key in data:
-            print(key)
-            pprint.pprint(data[key]["tags"])
+        #     i += 1
+        #     if i % 10000 == 0:
+        #         print(f"{i} - {word.base} - {word.category}")
+        # print(f"{i} - {word.base}")
+        #
+        # import pprint
+        # for key in data:
+        #     data[key]['attributes'] = sorted(data[key]['attributes'])
+        #     data[key]["tags"] = sorted(data[key]["tags"])
+        #     data[key]['inflections'] = sorted(data[key]['inflections'])
+        # pprint.pprint(data)
+        # for key in data:
+        #     print(key)
+        #     pprint.pprint(data[key]["tags"])

@@ -6,6 +6,7 @@ from django.contrib.postgres import fields
 from django.db import models
 from django.utils.functional import cached_property
 
+from randsense import inflections
 from randsense import parsing
 
 
@@ -37,15 +38,15 @@ class Sentence(models.Model):
 
     is_correct = models.BooleanField(default=True)
 
-    @cached_property
-    def words(self):
-        return " ".join(word["fields"]["base"] for word in self.base)
-
     class Meta:
         ordering = ('-created',)
 
     def __str__(self):
         return f"{self.base[:50]}"
+
+    @cached_property
+    def words(self):
+        return " ".join(word["fields"]["base"] for word in self.base)
 
     @classmethod
     def create_random_sentence(cls):
@@ -69,7 +70,9 @@ class Sentence(models.Model):
             self.base.append(word_json)
 
     def inflect(self):
-        pass
+        inflector = inflections.Inflector()
+        self.inflected = inflector.inflect(self.diagram, self.base)
+        self.save()
 
     @classmethod
     def get_random_word(cls, category):

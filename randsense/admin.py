@@ -56,6 +56,20 @@ class AuxiliaryAdmin(admin.ModelAdmin):
     formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
 
 
+@admin.register(models.Preposition)
+class SpecialWordAdmin(admin.ModelAdmin):
+    list_display = ["base"]
+    search_fields = ["base"]
+    formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
+
+
+@admin.register(models.Conjunction)
+class SpecialWordAdmin(admin.ModelAdmin):
+    list_display = ["base"]
+    search_fields = ["base"]
+    formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
+
+
 @admin.register(models.SpecialWord)
 class SpecialWordAdmin(admin.ModelAdmin):
     list_display = ["base"]

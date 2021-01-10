@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  db:
+  database:
     image: postgres
     environment:
       - POSTGRES_DB=randsense
@@ -15,8 +15,7 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
-      - redis
+      - database
     env_file: env.local
   manage:
     build: .
@@ -25,16 +24,14 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - db
+      - database
     env_file: env.local
-  redis:
-    image: redis:6.0.9
   tests:
     build:
       context: .
     command: test
     depends_on:
-      - db
+      - database
     entrypoint: /usr/local/bin/python /app/manage.py
     restart: 'no'
     volumes:
