@@ -46,14 +46,14 @@ class Command(BaseCommand):
     help = "Creates word records from lexicon xml file"
 
     def add_arguments(self, parser):
-        parser.add_argument('xml_file', type=str)
+        parser.add_argument("xml_file", type=str)
 
     def handle(self, *args, **options):
         # TODO remove
         i = 1
         data = {}
 
-        tree = xml.parse(options['xml_file'])
+        tree = xml.parse(options["xml_file"])
         root = tree.getroot()
 
         total = len(root)
@@ -77,12 +77,14 @@ class Command(BaseCommand):
                 # Inflections
                 elif line.tag == "inflVars":
                     # TODO remove
-                    data[word.category]['inflections'].add(line.attrib['infl'])
+                    data[word.category]["inflections"].add(line.attrib["infl"])
                     word.inflections[line.attrib["infl"]] = line.text
                 elif line.tag == f"{word.category}Entry":
                     for entry in line:
                         # TODO remove
-                        data[word.category]["attributes"].add(f"{entry.tag} - {entry.text}")
+                        data[word.category]["attributes"].add(
+                            f"{entry.tag} - {entry.text}"
+                        )
                         data[word.category]["tags"].add(entry.tag)
 
                         # `variant` seems to be repeats of inflections
@@ -111,7 +113,9 @@ class Command(BaseCommand):
             # print(i/total)
             # print(i % one_percent)
             if i % one_percent == 0:
-                logger.info(f"{str((i/total)*100)[:2]}% - {word.base} - {word.category}")
+                logger.info(
+                    f"{str((i/total)*100)[:2]}% - {word.base} - {word.category}"
+                )
         # print(f"{i} - {word.base}")
         #
         # import pprint

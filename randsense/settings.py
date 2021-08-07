@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['RANDSENSE_SECRET_KEY']
+SECRET_KEY = os.environ["RANDSENSE_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("RANDSENSE_DEBUG", False) == "True"
@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     "api",
-    "randsense"
+    "randsense",
 ]
 
 MIDDLEWARE = [
@@ -89,12 +89,12 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": os.environ.get("DB_TEST_NAME", "randsense"),
         "USER": "randsense",
-        "PASSWORD": os.environ['RANDSENSE_DB_PASSWORD'],
-        "HOST": os.environ['RANDSENSE_DB_HOST'],
+        "PASSWORD": os.environ["RANDSENSE_DB_PASSWORD"],
+        "HOST": os.environ["RANDSENSE_DB_HOST"],
         "PORT": 5432,
         "TEST": {
             "NAME": os.environ.get("DB_TEST_NAME", "randsense"),
-        }
+        },
     }
 }
 
@@ -139,16 +139,16 @@ STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO',
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
     },
 }
 
@@ -158,14 +158,12 @@ REST_FRAMEWORK = {
     # "DEFAULT_PERMISSION_CLASSES": [
     #     "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
     # ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [],
-    'DEFAULT_PERMISSION_CLASSES': [],
+    "DEFAULT_AUTHENTICATION_CLASSES": [],
+    "DEFAULT_PERMISSION_CLASSES": [],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
-    "PAGE_SIZE": 25
+    "PAGE_SIZE": 25,
 }
 
-CORS_ALLOWED_ORIGINS = os.environ['RANDSENSE_CORS_ALLOWED_ORIGINS'].split(',')
+CORS_ALLOWED_ORIGINS = os.environ["RANDSENSE_CORS_ALLOWED_ORIGINS"].split(",")
 
-SENTENCE_GRAMMAR = parse_grammar_file()
-
-DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

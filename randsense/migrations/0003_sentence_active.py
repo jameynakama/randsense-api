@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('randsense', '0002_auto_20210806_0143'),
+        ("randsense", "0002_auto_20210806_0143"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='sentence',
-            name='active',
+            model_name="sentence",
+            name="active",
             field=models.BooleanField(default=True),
         ),
     ]

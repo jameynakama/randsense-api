@@ -17,8 +17,9 @@ def setup(db):
     # TODO What the f, get this to work on a module level. It's slow as hell.
     call_command(
         "ingest_lexicon",
-        os.path.join(settings.BASE_DIR, "randsense", "tests", "files",
-                     "test_lexicon.xml")
+        os.path.join(
+            settings.BASE_DIR, "randsense", "tests", "files", "test_lexicon.xml"
+        ),
     )
 
 

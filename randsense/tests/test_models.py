@@ -34,12 +34,7 @@ class RandomWordManagerTestCase(TestCase):
 
     def test_can_query_for_verb_types(self):
         """Should be able to query for random verb types"""
-        verb_types = [
-            "intran",
-            "tran",
-            "ditran",
-            "link"
-        ]
+        verb_types = ["intran", "tran", "ditran", "link"]
         for category in verb_types:
             word = models.Sentence.get_random_word(f"verb:{category}")
             assert word.category == "verb"

@@ -11,8 +11,9 @@ class IngestLexiconTestCase(TestCase):
     def setUp(self) -> None:
         call_command(
             "ingest_lexicon",
-            os.path.join(settings.BASE_DIR, "randsense", "tests", "files",
-                         "test_lexicon.xml")
+            os.path.join(
+                settings.BASE_DIR, "randsense", "tests", "files", "test_lexicon.xml"
+            ),
         )
 
     def test_creates_records_with_correct_base_and_category(self):

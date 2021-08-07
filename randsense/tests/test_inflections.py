@@ -3,32 +3,10 @@ from django.test import TestCase
 from randsense.util import inflections
 
 WORDS = {
-    "a": {
-        "fields": {
-            "base": "a",
-            "category": "det",
-            "attributes": {
-                "sing": True
-            }
-        }
-    },
-    "all": {
-        "fields": {
-            "base": "all",
-            "category": "det",
-            "attributes": {
-                "plur": True
-            }
-        }
-    },
+    "a": {"fields": {"base": "a", "category": "det", "attributes": {"sing": True}}},
+    "all": {"fields": {"base": "all", "category": "det", "attributes": {"plur": True}}},
     "blue": {
-        "fields": {
-            "base": "blue",
-            "category": "adj",
-            "attributes": {
-                "sing": True
-            }
-        }
+        "fields": {"base": "blue", "category": "adj", "attributes": {"sing": True}}
     },
     "bird": {
         "fields": {
@@ -37,21 +15,17 @@ WORDS = {
             "inflections": {
                 "singular": "bird",
                 "plural": "birds",
-            }
+            },
         }
     },
     "fly": {
         "fields": {
             "base": "fly",
             "category": "verb",
-            "attributes": {
-                "intran": True
-            },
-            "inflections": {
-                "pres3s": "flies"
-            }
+            "attributes": {"intran": True},
+            "inflections": {"pres3s": "flies"},
         }
-    }
+    },
 }
 
 

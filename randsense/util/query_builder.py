@@ -6,7 +6,7 @@ LOOKUP_FIELDS = {
     "Pronoun": "type",
     "Determiner": "variants",
     "Noun": "variants",
-    "Adverb": "modification"
+    "Adverb": "modification",
 }
 
 

@@ -11,6 +11,7 @@ from randsense import models
 # rad randsense
 # dcr manage loaddata all.json
 
+
 class Command(BaseCommand):
     help = "Reduce all tables to 100 items or less, for testing"
 
@@ -27,10 +28,10 @@ class Command(BaseCommand):
             models.Noun,
             models.Preposition,
             models.Auxiliary,
-            models.Conjunction
+            models.Conjunction,
         ]:
             if klass.objects.count() > options["keep"]:
-                keep = klass.objects.order_by("?")[:options["keep"]]
+                keep = klass.objects.order_by("?")[: options["keep"]]
                 klass.objects.exclude(pk__in=keep).delete()
                 assert klass.objects.count() <= options["keep"]
 

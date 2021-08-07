@@ -9,14 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 # categories: {'adv', 'conj', 'pron', 'aux', 'adj', 'verb', 'noun', 'det', 'modal', 'prep'}
-CATEGORIES_TO_ALWAYS_SAVE = [
-    "conj",
-    "pron",
-    "aux",
-    "det",
-    "modal",
-    "prep"
-]
+CATEGORIES_TO_ALWAYS_SAVE = ["conj", "pron", "aux", "det", "modal", "prep"]
 
 
 class Command(BaseCommand):
@@ -30,10 +23,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         with open(options["filename"], "r") as infile:
             with open(options["output_file"], "w") as outfile:
-                outfile.writelines([
-                    '<?xml version="1.0" encoding="UTF-8"?>\n',
-                    '<lexRecords>\n'
-                ])
+                outfile.writelines(
+                    ['<?xml version="1.0" encoding="UTF-8"?>\n', "<lexRecords>\n"]
+                )
                 tree = xml.parse(infile)
                 root = tree.getroot()
 

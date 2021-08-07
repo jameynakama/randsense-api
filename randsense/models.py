@@ -10,6 +10,8 @@ from randsense.util import inflections, query_builder, parsing
 
 
 # categories: {'adv', 'conj', 'pron', 'aux', 'adj', 'verb', 'noun', 'det', 'modal', 'prep'}
+
+
 def get_word_class(category):
     class_map = {
         "noun": Noun,
@@ -22,10 +24,10 @@ def get_word_class(category):
         "prep": Preposition,
         "det": Determiner,
         "modal": Modal,
-        "special": SpecialWord
+        "special": SpecialWord,
     }
     if ":" in category:
-        category = category[:category.index(":")]
+        category = category[: category.index(":")]
     return class_map.get(category, GenericWord)
 
 
@@ -49,7 +51,14 @@ class Singleton(models.Model):
 class ApiSettings(Singleton):
     class Meta:
         verbose_name_plural = "API Settings"
+
     base_word_frequency = models.BigIntegerField(default=1000000)
+    grammar_source = models.TextField(null=True, blank=True)
+    grammar = models.JSONField(null=True, blank=True, default=dict)
+
+    def save(self, *args, **kwargs):
+        self.grammar = parsing.parse_grammar(self.grammar_source)
+        super().save(*args, **kwargs)
 
 
 class Sentence(models.Model):
@@ -63,7 +72,7 @@ class Sentence(models.Model):
     is_correct = models.BooleanField(default=True)
 
     class Meta:
-        ordering = ('-created',)
+        ordering = ("-created",)
 
     def __str__(self):
         return f"{self.base[:50]}"
@@ -84,7 +93,7 @@ class Sentence(models.Model):
 
     def get_random_diagram(self):
         # TODO Test
-        self.diagram = parsing.get_sentence_diagram()
+        self.diagram = parsing.get_sentence_diagram(ApiSettings.load().grammar)
 
     def fill_in_base_words(self):
         for category in self.diagram:
@@ -105,8 +114,11 @@ class Sentence(models.Model):
         category, specific_type = query_builder.get_category_and_type(category)
         klass = get_word_class(category)
         base_word_frequency = ApiSettings.load().base_word_frequency
-        query = query_builder.get_query_for_category(klass, specific_type=specific_type)\
-            .filter(active=True, rank__gt=base_word_frequency) # TODO make this fancy or at least a setting
+        query = query_builder.get_query_for_category(
+            klass, specific_type=specific_type
+        ).filter(
+            active=True, rank__gt=base_word_frequency
+        )  # TODO make this fancy or at least a setting
 
         earliest_pk = int(query.earliest("pk").pk)
         latest_pk = int(query.latest("pk").pk)

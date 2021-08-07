@@ -96,6 +96,7 @@ class ModalAdmin(admin.ModelAdmin):
 class SettingsAdmin(admin.ModelAdmin):
     list_display = ["name", "base_word_frequency"]
     list_editable = ["base_word_frequency"]
+    formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
 
     def name(self, obj):
         return "Edit"

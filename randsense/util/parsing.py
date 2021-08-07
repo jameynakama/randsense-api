@@ -15,8 +15,6 @@
 import os
 import random
 
-from django.conf import settings
-
 
 def parse_grammar_file():
     """Parse the grammar file into a dictionary"""
@@ -25,35 +23,41 @@ def parse_grammar_file():
     #     'indicative',
     #     )
     # self.base_sentence_type = random.choice(possible_types)
+    data = (
+        open(os.path.join(os.path.dirname(__file__), "../grammar.txt"), "r")
+        .read()
+        .split("\n")
+    )
+    return parse_grammar(data)
 
-    data = open(os.path.join(os.path.dirname(__file__), '../grammar.txt'), 'r').read().split('\n')
 
+def parse_grammar(text):
     processed_data = []
 
-    for line in data:
+    text = [line for line in text.split("\r\n") if line]
+    for line in text:
         # delete comments and blank lines from grammar data
-        if not line or line[0] == '#':
+        if not line or line[0] == "#":
             continue
-        processed_data.append(line.split(' -> '))
+        processed_data.append(line.split(" -> "))
 
     grammar = {}
     for element in processed_data:
         if element[0] not in grammar:
             grammar[element[0]] = []
-        for item in element[1].split(' | '):
-            grammar[element[0]].append(item.split(' '))
+        for item in element[1].split(" | "):
+            grammar[element[0]].append(item.split(" "))
 
-    # import pprint
-    # pprint.pprint(grammar)
     return grammar
 
 
-def get_sentence_diagram(starting_point="S"):
+def get_sentence_diagram(grammar, starting_point="S"):
     """Create a random sentence diagram"""
+
     def go(level):
-        if level in settings.SENTENCE_GRAMMAR:
+        if level in grammar:
             weights = []
-            choices = settings.SENTENCE_GRAMMAR[level]
+            choices = grammar[level]
             for choice in choices:
                 try:
                     float(choice[-1])
@@ -62,14 +66,14 @@ def get_sentence_diagram(starting_point="S"):
                     choice.append("1.0")
                     weights.append(1.0)
             next_choices = []
-            for i in range(len(choices)-1, -1, -1):
+            for i in range(len(choices) - 1, -1, -1):
                 if weights[i] > random.random():
                     next_choices.append(choices[i][:-1])
             next_choice = random.choice(next_choices)
             for element in next_choice:
                 go(element)
         else:
-            if level != '_':
+            if level != "_":
                 result.append(level)
 
     result = []

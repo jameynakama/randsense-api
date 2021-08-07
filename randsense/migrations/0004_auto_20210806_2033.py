@@ -6,72 +6,72 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('randsense', '0003_sentence_active'),
+        ("randsense", "0003_sentence_active"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='sentence',
-            name='active',
+            model_name="sentence",
+            name="active",
         ),
         migrations.AddField(
-            model_name='adjective',
-            name='active',
+            model_name="adjective",
+            name="active",
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='adverb',
-            name='active',
+            model_name="adverb",
+            name="active",
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='auxiliary',
-            name='active',
+            model_name="auxiliary",
+            name="active",
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='conjunction',
-            name='active',
+            model_name="conjunction",
+            name="active",
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='determiner',
-            name='active',
+            model_name="determiner",
+            name="active",
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='genericword',
-            name='active',
+            model_name="genericword",
+            name="active",
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='modal',
-            name='active',
+            model_name="modal",
+            name="active",
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='noun',
-            name='active',
+            model_name="noun",
+            name="active",
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='preposition',
-            name='active',
+            model_name="preposition",
+            name="active",
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='pronoun',
-            name='active',
+            model_name="pronoun",
+            name="active",
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='specialword',
-            name='active',
+            model_name="specialword",
+            name="active",
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='verb',
-            name='active',
+            model_name="verb",
+            name="active",
             field=models.BooleanField(default=True),
         ),
     ]
