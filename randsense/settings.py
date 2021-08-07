@@ -164,10 +164,7 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 25
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://localhost:8000",
-]
+CORS_ALLOWED_ORIGINS = os.environ['RANDSENSE_CORS_ALLOWED_ORIGINS'].split(',')
 
 SENTENCE_GRAMMAR = parse_grammar_file()
 
