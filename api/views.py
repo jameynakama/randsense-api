@@ -38,13 +38,4 @@ class SentenceViewset(
 
     def create(self, request, *args, **kwargs):
         sentence = models.Sentence.create_random_sentence()
-        inflected = sentence.inflected
-        # return HttpResponse(' '.join(word['fields']['base'] for word in sentence.base))
-
-        data = {
-            "sentence": sentence.inflected,
-            "diagram": sentence.diagram,
-            "full_data": self.serializer_class(sentence).data,
-        }
-
-        return HttpResponse(json.dumps(data))
+        return HttpResponse(json.dumps(self.serializer_class(sentence).data))
