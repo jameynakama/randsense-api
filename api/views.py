@@ -1,7 +1,3 @@
-import json
-
-from django.http import HttpResponse
-
 from rest_framework import mixins, status, viewsets
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
@@ -39,11 +35,12 @@ class SentenceViewset(
 
     def create(self, request, *args, **kwargs):
         sentence = models.Sentence.create_random_sentence()
-        return HttpResponse(json.dumps(self.serializer_class(sentence).data))
+        return Response(self.serializer_class(sentence).data)
 
     # For incorrect sentences
+    # TODO: Turn this into a custom function
     def partial_update(self, request, *args, **kwargs):
         instance = self.queryset.get(id=kwargs.get('pk'))
         instance.incorrect_votes += 1
         instance.save()
-        return HttpResponse(json.dumps(self.serializer_class(instance).data))
+        return Response(self.serializer_class(instance).data)

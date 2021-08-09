@@ -32,23 +32,18 @@ def inflect(sentence):
     bare_sentence = [word["fields"]["base"] for word in sentence.base]
 
     # 1. inflect nouns by examining their determiners
-    bare_sentence = route_nouns(sentence.diagram, bare_sentence, sentence)
+    bare_sentence = inflect_nouns(sentence.diagram, bare_sentence, sentence)
 
     # 2. conjugate verbs by finding their subjects (and determiners)
-    bare_sentence = route_verbs(sentence, bare_sentence)
+    bare_sentence = inflect_verbs(sentence, bare_sentence)
 
     # 3. make indefinite articles agree
     bare_sentence = make_articles_agree(bare_sentence)
 
     return bare_sentence
 
-    # while 'indefinite-article' in sentence.diagram:
-    #     new_determiner = make_article_agree(base_sentence[pos_sentence.index('indefinite-article')+1])
-    #     base_sentence[pos_sentence.index('indefinite-article')] = new_determiner
-    #     pos_sentence[pos_sentence.index('indefinite-article')] = 'determiner'
 
-
-def route_nouns(diagram, bare_sentence, sentence):
+def inflect_nouns(diagram, bare_sentence, sentence):
     diagram_to_process = diagram.copy()
     while "det" in diagram_to_process:
         # find all determiners and their following nouns for pluralization
@@ -77,7 +72,7 @@ def route_nouns(diagram, bare_sentence, sentence):
     return bare_sentence
 
 
-def route_verbs(sentence, bare_sentence):
+def inflect_verbs(sentence, bare_sentence):
     diagram = ["verb" if "verb" in pos else pos for pos in sentence.diagram]
     while "verb" in diagram:
         # Find all verbs and their preceding subjects and determiners

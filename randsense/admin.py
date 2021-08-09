@@ -10,6 +10,7 @@ from randsense import models
 class SentenceAdmin(admin.ModelAdmin):
     list_display = ["pk", "sentence", "incorrect_votes"]
     sortable_by = ["incorrect_votes"]
+    list_editable = ["incorrect_votes"]
 
     def sentence(self, instance):
         return instance.inflected
