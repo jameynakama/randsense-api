@@ -6,6 +6,15 @@ from django_json_widget.widgets import JSONEditorWidget
 from randsense import models
 
 
+@admin.register(models.Sentence)
+class SentenceAdmin(admin.ModelAdmin):
+    list_display = ["pk", "sentence", "incorrect_votes"]
+    sortable_by = ["incorrect_votes"]
+
+    def sentence(self, instance):
+        return instance.inflected
+
+
 @admin.register(models.GenericWord)
 class GenericWordAdmin(admin.ModelAdmin):
     list_display = ["base", "category"]

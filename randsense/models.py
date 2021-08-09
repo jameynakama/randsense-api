@@ -69,7 +69,7 @@ class Sentence(models.Model):
     diagram = fields.ArrayField(models.CharField(max_length=255), null=True, blank=True)
     inflected = models.TextField(null=True, blank=True)
 
-    is_correct = models.BooleanField(default=True)
+    incorrect_votes = models.IntegerField(default=0)
 
     class Meta:
         ordering = ("-created",)

@@ -30,6 +30,7 @@ class CreateSentenceMixin:
 class SentenceViewset(
     mixins.RetrieveModelMixin,
     mixins.ListModelMixin,
+    mixins.UpdateModelMixin,
     CreateSentenceMixin,
     viewsets.GenericViewSet,
 ):
@@ -39,3 +40,10 @@ class SentenceViewset(
     def create(self, request, *args, **kwargs):
         sentence = models.Sentence.create_random_sentence()
         return HttpResponse(json.dumps(self.serializer_class(sentence).data))
+
+    # For incorrect sentences
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.queryset.get(id=kwargs.get('pk'))
+        instance.incorrect_votes += 1
+        instance.save()
+        return HttpResponse(json.dumps(self.serializer_class(instance).data))
