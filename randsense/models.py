@@ -111,28 +111,31 @@ class Sentence(models.Model):
 
     @classmethod
     def get_random_word(cls, category):
-        category, specific_type = query_builder.get_category_and_type(category)
+        category, specific_type, specific_word = query_builder.get_category_and_type(category)
         klass = get_word_class(category)
         base_word_frequency = ApiSettings.load().base_word_frequency
         query = query_builder.get_query_for_category(
-            klass, specific_type=specific_type
-        ).filter(
-            active=True, rank__gt=base_word_frequency
-        )  # TODO make this fancy or at least a setting
+            klass, specific_type=specific_type, specific_word=specific_word
+        ).filter(active=True)
 
-        earliest_pk = int(query.earliest("pk").pk)
-        latest_pk = int(query.latest("pk").pk)
+        if specific_word:
+            return query.first()
+        else:
+            query = query.filter(rank__gt=base_word_frequency)
 
-        choice = None
+            earliest_pk = int(query.earliest("pk").pk)
+            latest_pk = int(query.latest("pk").pk)
 
-        while choice is None:
-            pk = random.randint(earliest_pk, latest_pk)
-            try:
-                choice = query.get(pk=pk)
-            except klass.DoesNotExist:
-                pass
+            choice = None
 
-        return choice
+            while choice is None:
+                pk = random.randint(earliest_pk, latest_pk)
+                try:
+                    choice = query.get(pk=pk)
+                except klass.DoesNotExist:
+                    pass
+
+            return choice
 
 
 class Word(models.Model):

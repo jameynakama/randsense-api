@@ -40,7 +40,6 @@ class DeterminerAndNounTestCase(TestCase):
             WORDS["fly"],
         ]
         sentence = inflections.inflect(diagram, sentence_data)
-        print(sentence)
         assert " ".join(sentence) == "a blue bird fly"
 
     def test_plural_determiner(self):
@@ -52,5 +51,4 @@ class DeterminerAndNounTestCase(TestCase):
             WORDS["fly"],
         ]
         sentence = inflections.inflect(diagram, sentence_data)
-        print(sentence)
         assert " ".join(sentence) == "all birds fly"

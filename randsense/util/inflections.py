@@ -29,22 +29,23 @@ verb_types = [
 
 
 def inflect(sentence):
-    bare_sentence = [word["fields"]["base"] for word in sentence.base]
-
     # 1. inflect nouns by examining their determiners
-    bare_sentence = inflect_nouns(sentence.diagram, bare_sentence, sentence)
+    sentence = inflect_nouns(sentence)
 
     # 2. conjugate verbs by finding their subjects (and determiners)
-    bare_sentence = inflect_verbs(sentence, bare_sentence)
+    sentence = inflect_verbs(sentence)
 
     # 3. make indefinite articles agree
-    bare_sentence = make_articles_agree(bare_sentence)
+    sentence = make_articles_agree(sentence)
 
-    return bare_sentence
+    inflected_sentence = [word.get("inflected", word["fields"]["base"])
+                          for word in sentence.base]
+
+    return inflected_sentence
 
 
-def inflect_nouns(diagram, bare_sentence, sentence):
-    diagram_to_process = diagram.copy()
+def inflect_nouns(sentence):
+    diagram_to_process = sentence.diagram.copy()
     while "det" in diagram_to_process:
         # find all determiners and their following nouns for pluralization
         determiner_index = diagram_to_process.index("det")
@@ -61,25 +62,25 @@ def inflect_nouns(diagram, bare_sentence, sentence):
             for i in range(
                 determiner_index, len(diagram_to_process) - determiner_index - 1
             ):
-                if diagram_to_process[i] == "noun":
+                if diagram_to_process[i].startswith("noun"):
                     noun_index = i
                     break
             if noun_index >= 0:
-                bare_sentence[noun_index] = pluralize_noun(sentence.base[noun_index])
+                sentence.base[noun_index]["inflected"] = pluralize_noun(sentence.base[noun_index])
                 diagram_to_process[noun_index] = "noun-inflected"
         diagram_to_process[determiner_index] = "determiner-done"
 
-    return bare_sentence
+    return sentence
 
 
-def inflect_verbs(sentence, bare_sentence):
+def inflect_verbs(sentence):
     diagram = ["verb" if "verb" in pos else pos for pos in sentence.diagram]
     while "verb" in diagram:
         # Find all verbs and their preceding subjects and determiners
         verb_index = [
-            diagram.index(determiner)
-            for determiner in diagram
-            if determiner.startswith("verb")
+            diagram.index(pos)
+            for pos in diagram
+            if pos.startswith("verb")
         ][0]
         determiner_index = -1
         subject_index = -1
@@ -92,7 +93,7 @@ def inflect_verbs(sentence, bare_sentence):
                 subject_index = i
                 break
 
-        bare_sentence[verb_index] = do_verb(
+        sentence.base[verb_index]["inflected"] = do_verb(
             sentence.base[subject_index],
             sentence.base[verb_index],
             any(
@@ -107,24 +108,24 @@ def inflect_verbs(sentence, bare_sentence):
 
         diagram[verb_index] = "verb-conjugated"
 
-    return bare_sentence
+    return sentence
 
 
-def make_articles_agree(bare_sentence):
+def make_articles_agree(sentence):
     #
     # fix things like "an uniform", "an unicycle", etc.
     #
-    for i, word in enumerate(bare_sentence):
-        if word in ["a", "an"]:
-            next_word = bare_sentence[i + 1]
-            if next_word[0] in ["a", "e", "i", "o", "u"]:
+    for i, word in enumerate(sentence.base):
+        if word["fields"]["base"] in ["a", "an"]:
+            next_word = sentence.base[i + 1]
+            if next_word["fields"]["base"][0] in ["a", "e", "i", "o", "u"]:
                 if not next_word.startswith("uni"):
-                    bare_sentence[i] = "an"
+                    sentence.base[i]["inflected"] = "an"
                 else:
-                    bare_sentence[i] = "a"
+                    sentence.base[i]["inflected"] = "a"
             else:
-                bare_sentence[i] = "a"
-    return bare_sentence
+                sentence.base[i]["inflected"] = "a"
+    return sentence
 
 
 def pluralize_noun(noun):
