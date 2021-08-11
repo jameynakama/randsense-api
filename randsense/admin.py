@@ -26,7 +26,8 @@ class GenericWordAdmin(admin.ModelAdmin):
 
 @admin.register(models.Noun)
 class NounAdmin(admin.ModelAdmin):
-    list_display = ["base"]
+    list_display = ["base", "rank"]
+    list_editable = ["rank"]
     search_fields = ["base"]
     formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
 
