@@ -61,17 +61,17 @@ class Command(BaseCommand):
                     # print(f"{i}: SKIPPING {noun.base}")
                     continue
                 # print(f"{i}: Looking for {noun.base}")
+                inner_word_rankings = []
                 for word in to_find:
                     # TODO ALL words must be in the freq file
                     # TODO manually add things like 1, 1st, etc
-                    inner_word_rankings = []
                     s.seek(0)
                     position = s.find(bytes(word.lower() + ',', "utf-8"))
                     # print(f"   Looking for {word}: {position}")
                     if position != -1:
                         s.seek(position)
                         rank = s.readline().decode("utf-8").split(",")[-1]
-                        inner_word_rankings.append(rank)
+                        inner_word_rankings.append(int(rank))
                         # print(f'   Found {noun.base} in file')
                         # print(f'   {s.readline()}')
                     else:
