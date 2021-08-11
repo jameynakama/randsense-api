@@ -38,7 +38,7 @@ def inflect(sentence):
     # 3. make indefinite articles agree
     sentence = make_articles_agree(sentence)
 
-    inflected_sentence = [word.get("inflected", word["fields"]["base"])
+    inflected_sentence = [word.get("inflected", word["base"])
                           for word in sentence.base]
 
     return inflected_sentence
@@ -53,7 +53,7 @@ def inflect_nouns(sentence):
         if any(
             [
                 variant in ["plur", "free", "singuncount", "pluruncount"]
-                for variant in sentence.base[determiner_index]["fields"]["attributes"][
+                for variant in sentence.base[determiner_index]["attributes"][
                     "variants"
                 ]
             ]
@@ -99,7 +99,7 @@ def inflect_verbs(sentence):
             any(
                 [
                     variant in ["plur", "free", "singuncount", "pluruncount"]
-                    for variant in sentence.base[determiner_index]["fields"][
+                    for variant in sentence.base[determiner_index][
                         "attributes"
                     ]["variants"]
                 ]
@@ -116,9 +116,9 @@ def make_articles_agree(sentence):
     # fix things like "an uniform", "an unicycle", etc.
     #
     for i, word in enumerate(sentence.base):
-        if word["fields"]["base"] in ["a", "an"]:
+        if word["base"] in ["a", "an"]:
             next_word = sentence.base[i + 1]
-            if next_word["fields"]["base"][0] in ["a", "e", "i", "o", "u"]:
+            if next_word["base"][0] in ["a", "e", "i", "o", "u"]:
                 if not next_word.startswith("uni"):
                     sentence.base[i]["inflected"] = "an"
                 else:
@@ -130,10 +130,10 @@ def make_articles_agree(sentence):
 
 def pluralize_noun(noun):
     # take into account uncount and pluruncount
-    if "plural" in noun["fields"]["inflections"]:
-        noun = noun["fields"]["inflections"]["plural"]
+    if "plural" in noun["inflections"]:
+        noun = noun["inflections"]["plural"]
     else:
-        noun = noun["fields"]["inflections"]["singular"]
+        noun = noun["inflections"]["singular"]
         if noun[-2:] in [
             "ey",
             "ay",
@@ -165,7 +165,7 @@ def do_verb(subject, verb, is_plural):
         ]
     )
 
-    if verb["fields"]["base"] == "be":
+    if verb["base"] == "be":
         return conjugate_for_be(subject, tense, is_plural)
 
     if tense == "present":
@@ -176,44 +176,44 @@ def do_verb(subject, verb, is_plural):
 
 def conjugate_for_present(subject, verb, is_plural):
     if is_plural:
-        return verb["fields"]["inflections"]["base"]
+        return verb["inflections"]["base"]
     else:
-        if subject["fields"]["base"] not in [
+        if subject["base"] not in [
             "i",
             "you",
             "we",
             "they",
         ]:
-            if verb["fields"]["inflections"]["pres3s"]:
-                return verb["fields"]["inflections"]["pres3s"]
+            if verb["inflections"]["pres3s"]:
+                return verb["inflections"]["pres3s"]
             else:
-                if verb["fields"]["base"][-1] == "y" and verb.base[-2:] != "ey":
-                    return verb["fields"]["base"][:-1] + "ies"
-                elif verb["fields"]["base"][-1] == "x":
-                    return verb["fields"]["base"] + "es"
-                elif verb["fields"]["base"][-2:] in ["sh", "ch", "ss"]:
-                    return verb["fields"]["base"] + "es"
+                if verb["base"][-1] == "y" and verb.base[-2:] != "ey":
+                    return verb["base"][:-1] + "ies"
+                elif verb["base"][-1] == "x":
+                    return verb["base"] + "es"
+                elif verb["base"][-2:] in ["sh", "ch", "ss"]:
+                    return verb["base"] + "es"
                 else:
-                    return verb["fields"]["base"] + "s"
+                    return verb["base"] + "s"
         else:
-            return verb["fields"]["base"]
+            return verb["base"]
 
 
 def conjugate_for_simple_past(verb):
-    if verb["fields"]["inflections"]["past"]:
-        return verb["fields"]["inflections"]["past"]
+    if verb["inflections"]["past"]:
+        return verb["inflections"]["past"]
     else:
-        if verb["fields"]["base"][-1] == "e":
+        if verb["base"][-1] == "e":
             return verb.base + "d"
-        elif verb["fields"]["base"][-2:] in [
+        elif verb["base"][-2:] in [
             "ey",
             "ay",
         ]:
-            return verb["fields"]["base"] + "ed"
-        elif verb["fields"]["base"][-1] == "y":
-            return verb["fields"]["base"][:-1] + "ied"
+            return verb["base"] + "ed"
+        elif verb["base"][-1] == "y":
+            return verb["base"][:-1] + "ied"
         else:
-            return verb["fields"]["base"] + "ed"
+            return verb["base"] + "ed"
 
 
 def conjugate_for_be(subject, tense, is_plural):

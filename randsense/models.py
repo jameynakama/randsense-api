@@ -99,7 +99,7 @@ class Sentence(models.Model):
         for category in self.diagram:
             new_word = self.get_random_word(category=category)
             serialized_word = serializers.serialize("json", [new_word])
-            word_json = json.loads(serialized_word)[0]
+            word_json = json.loads(serialized_word)[0]["fields"]
             self.base.append(word_json)
 
     def inflect(self):

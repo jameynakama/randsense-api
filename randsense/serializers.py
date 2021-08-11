@@ -14,4 +14,4 @@ class SentenceSerializer(serializers.ModelSerializer):
 class WordSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Word
-        fields = "__all__"
+        fields = ['fields']
