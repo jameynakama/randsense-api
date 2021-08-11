@@ -30,8 +30,11 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument("rankings_file", type=str)
+        parser.add_argument("--n", type=int, default=0)
 
     def handle(self, *args, **options):
+        how_many = options["n"]
+        one_percent = how_many / 100
         i = 0
         with open(options["rankings_file"], newline="") as f:
             reader = csv.reader(f, delimiter=",")
@@ -39,10 +42,18 @@ class Command(BaseCommand):
             for row in reader:
                 word, ranking = row
                 for Word in word_types:
-                    words = Word.objects.filter(base=word)
+                    words = Word.objects.filter(base__icontains=word)
                     for word_object in words:
                         word_object.rank = ranking
                         word_object.save()
-                if i % 1000 == 0:
-                    print(f"{i}: {word}::{word_object.__class__.__name__}::{ranking}")
+
+                if how_many:
+                    progress = (i / how_many) * 100
+                    if progress % one_percent == 0:
+                        print(f"{progress}%")
+                        print(f"{progress}%: {word}::{word_object.__class__.__name__}::{ranking}")
                 i += 1
+                print(i)
+                print(how_many)
+                if i >= how_many:
+                    return
