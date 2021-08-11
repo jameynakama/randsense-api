@@ -39,9 +39,10 @@ class Command(BaseCommand):
         how_many = options["how_many"]
         i = 0
         queryset = models.Noun.objects.filter(rank=-1)[:how_many]
+        total = queryset.count()
         widgets = ["Ranking: ", progressbar.Bar("=", "[", "]"), " ",
                    progressbar.Percentage()]
-        pbar = progressbar.ProgressBar(maxval=how_many, widgets=widgets).start()
+        pbar = progressbar.ProgressBar(maxval=total, widgets=widgets).start()
         with open(options["rankings_file"], newline="") as f:
             s = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
             # TODO set all to -1 and filter on that
@@ -78,4 +79,3 @@ class Command(BaseCommand):
                 noun.rank = min(inner_word_rankings)
                 noun.save()
         pbar.finish()
-
