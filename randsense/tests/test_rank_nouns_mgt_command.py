@@ -60,3 +60,10 @@ def test_ranks_unfound_words_as_zero():
     models.Noun.objects.create(base="AOFAS insect", rank=-1)
     call_command("rank_nouns", "randsense/tests/files/test_freq.csv")
     assert models.Noun.objects.get(base="AOFAS insect").rank == 0
+
+
+@pytest.mark.django_db
+def test_finds_whole_words():
+    models.Noun.objects.create(base="ntis", rank=-1)
+    call_command("rank_nouns", "randsense/tests/files/test_freq.csv")
+    assert models.Noun.objects.get(base="ntis").rank == 0

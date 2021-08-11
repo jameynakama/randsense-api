@@ -66,10 +66,11 @@ class Command(BaseCommand):
                     # TODO ALL words must be in the freq file
                     # TODO manually add things like 1, 1st, etc
                     s.seek(0)
-                    position = s.find(bytes(word.lower() + ',', "utf-8"))
+                    position = s.rfind(bytes('\n' + word.lower() + ',', "utf-8"))
                     # print(f"   Looking for {word}: {position}")
                     if position != -1:
                         s.seek(position)
+                        s.readline()  # Read a line; \n leaves us on the previous one
                         rank = s.readline().decode("utf-8").split(",")[-1]
                         inner_word_rankings.append(int(rank))
                         # print(f'   Found {noun.base} in file')
