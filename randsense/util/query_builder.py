@@ -30,7 +30,11 @@ def get_query_for_category(klass, specific_type=None, specific_word=None):
     kwargs = {}
     # Verbs are special; their tags are attributes
     if klass.__name__ == "Verb" and specific_type:
-        kwargs[f"attributes__{specific_type}__isnull"] = False
+        if ":" in specific_type:
+            specific_type, attribute = specific_type.split(":")
+            kwargs[f"attributes__{specific_type}__contains"] = attribute
+        else:
+            kwargs[f"attributes__{specific_type}__isnull"] = False
     elif specific_type:
         kwargs[f"attributes__{LOOKUP_FIELDS[klass.__name__]}__contains"] = specific_type
     elif specific_word:

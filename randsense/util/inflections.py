@@ -38,6 +38,9 @@ def inflect(sentence):
     # 3. make indefinite articles agree
     sentence = make_articles_agree(sentence)
 
+    # 4. add any special punctuation
+    sentence = add_punctuation(sentence)
+
     inflected_sentence = [word.get("inflected", word["base"])
                           for word in sentence.base]
 
@@ -46,6 +49,7 @@ def inflect(sentence):
 
 def inflect_nouns(sentence):
     diagram_to_process = sentence.diagram.copy()
+    diagram_to_process = [pos.split("*")[0] for pos in diagram_to_process]
     while "det" in diagram_to_process:
         # find all determiners and their following nouns for pluralization
         determiner_index = diagram_to_process.index("det")
@@ -59,9 +63,7 @@ def inflect_nouns(sentence):
             ]
         ):
             noun_index = -1
-            for i in range(
-                determiner_index, len(diagram_to_process) - determiner_index - 1
-            ):
+            for i in range(determiner_index + 1, len(diagram_to_process)):
                 if diagram_to_process[i].startswith("noun"):
                     noun_index = i
                     break
@@ -125,6 +127,13 @@ def make_articles_agree(sentence):
                     sentence.base[i]["inflected"] = "a"
             else:
                 sentence.base[i]["inflected"] = "a"
+    return sentence
+
+
+def add_punctuation(sentence):
+    for i, word in enumerate(sentence.base):
+        if word["category"] == "punc":
+            sentence.base[i]["inflected"] = word["attributes"]["appearance"]
     return sentence
 
 
