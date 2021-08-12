@@ -52,13 +52,35 @@ class ApiSettings(Singleton):
     class Meta:
         verbose_name_plural = "API Settings"
 
-    base_word_frequency = models.BigIntegerField(default=1000000)
     grammar_source = models.TextField(null=True, blank=True)
     grammar = models.JSONField(null=True, blank=True, default=dict)
+
+    def __str__(self):
+        return "API settings"
 
     def save(self, *args, **kwargs):
         self.grammar = parsing.parse_grammar(self.grammar_source)
         super().save(*args, **kwargs)
+
+    @property
+    def frequency_settings(self):
+        return FrequencySettings.load()
+
+
+class FrequencySettings(Singleton):
+    class Meta:
+        verbose_name_plural = "Frequency Settings"
+
+    default = models.BigIntegerField(default=1000000)
+
+    nouns = models.BigIntegerField(default=1000000)
+    verbs = models.BigIntegerField(default=500000)
+    adjectives = models.BigIntegerField(default=500000)
+
+    api_settings = models.ForeignKey(ApiSettings, null=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return "Frequency settings"
 
 
 class Sentence(models.Model):
@@ -113,7 +135,6 @@ class Sentence(models.Model):
     def get_random_word(cls, category):
         category, specific_type, specific_word = query_builder.get_category_and_type(category)
         klass = get_word_class(category)
-        base_word_frequency = ApiSettings.load().base_word_frequency
         query = query_builder.get_query_for_category(
             klass, specific_type=specific_type, specific_word=specific_word
         ).filter(active=True)
@@ -121,6 +142,10 @@ class Sentence(models.Model):
         if specific_word:
             return query.first()
         else:
+            api_settings = ApiSettings.load()
+            base_word_frequency = getattr(api_settings.frequency_settings, category,
+                                          api_settings.frequency_settings.default)
+
             query = query.filter(rank__gt=base_word_frequency)
 
             earliest_pk = int(query.earliest("pk").pk)

@@ -105,11 +105,16 @@ class ModalAdmin(admin.ModelAdmin):
     formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
 
 
+class FrequencySettingsInline(admin.StackedInline):
+    model = models.FrequencySettings
+    max_num = 1
+
+
 @admin.register(models.ApiSettings)
 class SettingsAdmin(admin.ModelAdmin):
-    list_display = ["name", "base_word_frequency"]
-    list_editable = ["base_word_frequency"]
+    list_display = ["name"]
+    inlines = [FrequencySettingsInline]
     formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
 
     def name(self, obj):
-        return "Edit"
+        return "Click to edit"
