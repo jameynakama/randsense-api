@@ -26,31 +26,32 @@ class GenericWordAdmin(admin.ModelAdmin):
 
 @admin.register(models.Noun)
 class NounAdmin(admin.ModelAdmin):
-    list_display = ["base", "rank"]
-    list_editable = ["rank"]
+    list_display = ["base", "rank", "active"]
+    list_editable = ["rank", "active"]
     search_fields = ["base"]
     formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
 
 
 @admin.register(models.Verb)
 class VerbAdmin(admin.ModelAdmin):
-    list_display = ["base", "rank"]
-    list_editable = ["rank"]
+    list_display = ["base", "rank", "active"]
+    list_editable = ["rank", "active"]
     search_fields = ["base"]
     formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
 
 
 @admin.register(models.Adjective)
 class AdjectiveAdmin(admin.ModelAdmin):
-    list_display = ["base", "rank"]
-    list_editable = ["rank"]
+    list_display = ["base", "rank", "active"]
+    list_editable = ["rank", "active"]
     search_fields = ["base"]
     formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
 
 
 @admin.register(models.Adverb)
 class AdverbAdmin(admin.ModelAdmin):
-    list_display = ["base"]
+    list_display = ["base", "rank", "active"]
+    list_editable = ["rank", "active"]
     search_fields = ["base"]
     formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
 
@@ -92,9 +93,8 @@ class SpecialWordAdmin(admin.ModelAdmin):
 
 @admin.register(models.Determiner)
 class DeterminerAdmin(admin.ModelAdmin):
-    list_display = ["base", "active"]
-    search_fields = ["base"]
-    list_editable = ["active"]
+    list_display = ["base", "rank", "active"]
+    list_editable = ["rank", "active"]
     formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
 
 
