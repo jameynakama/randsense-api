@@ -13,22 +13,9 @@ from randsense.util import inflections, query_builder, parsing
 
 
 def get_word_class(category):
-    class_map = {
-        "noun": Noun,
-        "verb": Verb,
-        "adj": Adjective,
-        "adv": Adverb,
-        "conj": Conjunction,
-        "pron": Pronoun,
-        "aux": Auxiliary,
-        "prep": Preposition,
-        "det": Determiner,
-        "modal": Modal,
-        "special": SpecialWord,
-    }
     if ":" in category:
         category = category[: category.index(":")]
-    return class_map.get(category, GenericWord)
+    return CLASS_MAP.get(category, GenericWord)
 
 
 class Singleton(models.Model):
@@ -123,6 +110,7 @@ class Sentence(models.Model):
             new_word = self.get_random_word(category=category)
             serialized_word = serializers.serialize("json", [new_word])
             word_json = json.loads(serialized_word)[0]["fields"]
+            word_json["pk"] = new_word.pk
             self.base.append(word_json)
 
     def inflect(self):
@@ -181,6 +169,7 @@ class Word(models.Model):
     attributes = models.JSONField(default=dict, blank=True)
 
     rank = models.BigIntegerField(default=0)
+    removal_votes = models.IntegerField(default=0)
 
     active = models.BooleanField(default=True)
 
@@ -231,3 +220,19 @@ class Determiner(Word):
 
 class Modal(Word):
     pass
+
+
+CLASS_MAP = {
+    "noun": Noun,
+    "verb": Verb,
+    "adj": Adjective,
+    "adv": Adverb,
+    "conj": Conjunction,
+    "pron": Pronoun,
+    "aux": Auxiliary,
+    "prep": Preposition,
+    "det": Determiner,
+    "modal": Modal,
+    "special": SpecialWord,
+    "punc": SpecialWord,
+}

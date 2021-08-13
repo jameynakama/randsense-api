@@ -11,7 +11,7 @@ class SentenceSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class WordSerializer(serializers.ModelSerializer):
+class VerbSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Word
-        fields = ['fields']
+        model = models.Verb
+        fields = "__all__"

@@ -16,91 +16,23 @@ class SentenceAdmin(admin.ModelAdmin):
         return instance.inflected
 
 
-@admin.register(models.GenericWord)
-class GenericWordAdmin(admin.ModelAdmin):
-    list_display = ["base", "category"]
-    list_filter = ["category"]
-    search_fields = ["base"]
-    formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
-
-
-@admin.register(models.Noun)
-class NounAdmin(admin.ModelAdmin):
-    list_display = ["base", "rank", "active"]
-    list_editable = ["rank", "active"]
-    search_fields = ["base"]
-    formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
-
-
-@admin.register(models.Verb)
-class VerbAdmin(admin.ModelAdmin):
-    list_display = ["base", "rank", "active"]
-    list_editable = ["rank", "active"]
-    search_fields = ["base"]
-    formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
-
-
-@admin.register(models.Adjective)
-class AdjectiveAdmin(admin.ModelAdmin):
-    list_display = ["base", "rank", "active"]
-    list_editable = ["rank", "active"]
-    search_fields = ["base"]
-    formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
-
-
 @admin.register(models.Adverb)
-class AdverbAdmin(admin.ModelAdmin):
-    list_display = ["base", "rank", "active"]
-    list_editable = ["rank", "active"]
-    search_fields = ["base"]
-    formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
-
-
-@admin.register(models.Pronoun)
-class PronounAdmin(admin.ModelAdmin):
-    list_display = ["base"]
-    search_fields = ["base"]
-    formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
-
-
+@admin.register(models.Adjective)
 @admin.register(models.Auxiliary)
-class AuxiliaryAdmin(admin.ModelAdmin):
-    list_display = ["base"]
-    search_fields = ["base"]
-    formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
-
-
-@admin.register(models.Preposition)
-class SpecialWordAdmin(admin.ModelAdmin):
-    list_display = ["base"]
-    search_fields = ["base"]
-    formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
-
-
 @admin.register(models.Conjunction)
-class SpecialWordAdmin(admin.ModelAdmin):
-    list_display = ["base"]
-    search_fields = ["base"]
-    formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
-
-
-@admin.register(models.SpecialWord)
-class SpecialWordAdmin(admin.ModelAdmin):
-    list_display = ["base"]
-    search_fields = ["base"]
-    formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
-
-
 @admin.register(models.Determiner)
-class DeterminerAdmin(admin.ModelAdmin):
-    list_display = ["base", "rank", "active"]
-    list_editable = ["rank", "active"]
-    formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
-
-
+@admin.register(models.GenericWord)
 @admin.register(models.Modal)
-class ModalAdmin(admin.ModelAdmin):
-    list_display = ["base"]
+@admin.register(models.Noun)
+@admin.register(models.Preposition)
+@admin.register(models.Pronoun)
+@admin.register(models.SpecialWord)
+@admin.register(models.Verb)
+class WordAdmin(admin.ModelAdmin):
+    list_display = ["base", "active", "removal_votes", "rank"]
+    list_editable = ["active", "removal_votes", "rank"]
+    list_filter = ["active"]
+    sortable_by = ["removal_votes", "rank"]
     search_fields = ["base"]
     formfield_overrides = {django_models.JSONField: {"widget": JSONEditorWidget}}
 
