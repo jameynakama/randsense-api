@@ -76,13 +76,13 @@ def inflect_nouns(sentence):
 
 
 def inflect_verbs(sentence):
-    diagram = ["verb" if "verb" in pos else pos for pos in sentence.diagram]
+    diagram = ["verb" if pos.startswith("verb") else pos for pos in sentence.diagram]
     while "verb" in diagram:
         # Find all verbs and their preceding subjects and determiners
         verb_index = [
             diagram.index(pos)
             for pos in diagram
-            if pos.startswith("verb")
+            if pos == "verb"
         ][0]
         determiner_index = -1
         subject_index = -1
@@ -114,14 +114,12 @@ def inflect_verbs(sentence):
 
 
 def make_articles_agree(sentence):
-    #
-    # fix things like "an uniform", "an unicycle", etc.
-    #
+    """Fix things like "an uniform", "an unicycle", etc."""
     for i, word in enumerate(sentence.base):
         if word["base"] in ["a", "an"]:
             next_word = sentence.base[i + 1]
             if next_word["base"][0] in ["a", "e", "i", "o", "u"]:
-                if not next_word.startswith("uni"):
+                if not next_word["base"].startswith("uni"):
                     sentence.base[i]["inflected"] = "an"
                 else:
                     sentence.base[i]["inflected"] = "a"
@@ -133,7 +131,7 @@ def make_articles_agree(sentence):
 def add_punctuation(sentence):
     for i, word in enumerate(sentence.base):
         if word["category"] == "punc":
-            sentence.base[i]["inflected"] = word["attributes"]["appearance"]
+            sentence.base[i]["inflected"] = word["attributes"]["base"]
     return sentence
 
 
@@ -209,7 +207,7 @@ def conjugate_for_present(subject, verb, is_plural):
 
 
 def conjugate_for_simple_past(verb):
-    if verb["inflections"]["past"]:
+    if verb["inflections"].get("past"):
         return verb["inflections"]["past"]
     else:
         if verb["base"][-1] == "e":
