@@ -76,6 +76,7 @@ class FrequencySettings(Singleton):
     nouns = models.BigIntegerField(default=1000000)
     verbs = models.BigIntegerField(default=500000)
     adjectives = models.BigIntegerField(default=500000)
+    adverbs = models.BigIntegerField(default=50000)
 
     api_settings = models.ForeignKey(ApiSettings, null=True, on_delete=models.SET_NULL)
 
