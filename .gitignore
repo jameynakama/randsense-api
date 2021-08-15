@@ -19,3 +19,5 @@ dumps/
 
 LEXICON.xml
 unranked.txt
+
+deploy.sh
