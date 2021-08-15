@@ -14,7 +14,6 @@ pytestmark = pytest.mark.usefixtures("setup")
 
 @pytest.fixture()
 def setup(db):
-    # TODO What the f, get this to work on a module level. It's slow as hell.
     call_command(
         "ingest_lexicon",
         os.path.join(
@@ -25,12 +24,17 @@ def setup(db):
 
 def test_get_category_and_type():
     """Should get category and type"""
-    assert query_builder.get_category_and_type("aminal:doge") == ["aminal", "doge"]
+    assert query_builder.get_category_and_type("aminal:doge") == ["aminal", "doge", None]
 
 
 def test_get_category_no_type():
     """Should get category and None if no type"""
-    assert query_builder.get_category_and_type("birb") == ("birb", None)
+    assert query_builder.get_category_and_type("birb") == ("birb", None, None)
+
+
+def test_get_specific_word():
+    """Should get category and specific word"""
+    assert query_builder.get_category_and_type("birb*chickadee") == ["birb", None, "chickadee"]
 
 
 def test_get_nothing():
@@ -45,12 +49,6 @@ def test_get_pronoun():
     assert query.count() > 0
 
 
-def test_get_specific_pronoun():
-    """Should query for specific pronouns"""
-    query = query_builder.get_query_for_category(models.Pronoun, "obj")
-    assert query.count() > 0
-
-
 def test_get_noun():
     """Should query for general nouns"""
     query = query_builder.get_query_for_category(models.Noun)
@@ -58,10 +56,10 @@ def test_get_noun():
 
 
 def test_get_specific_noun():
-    """Should query for specific nouns"""
-    query = query_builder.get_query_for_category(models.Noun, "uncount")
+    """Should query for specific noun types"""
+    query = query_builder.get_query_for_category(models.Noun, "variants:uncount")
     assert query.count() > 0
-    query = query_builder.get_query_for_category(models.Noun, "reg")
+    query = query_builder.get_query_for_category(models.Noun, "variants:reg")
     assert query.count() > 0
 
 
@@ -71,11 +69,11 @@ def test_get_adverb():
     assert query.count() > 0
 
 
-def test_get_specific_adverb():
-    """Should query for specific adverbs"""
-    query = query_builder.get_query_for_category(models.Adverb, "sentence_modifier")
+def test_get_specific_adverb_type():
+    """Should query for specific adverb types"""
+    query = query_builder.get_query_for_category(models.Adverb, "modification:sentence_modifier")
     assert query.count() > 0
-    query = query_builder.get_query_for_category(models.Adverb, "verb_modifier")
+    query = query_builder.get_query_for_category(models.Adverb, "modification:verb_modifier")
     assert query.count() > 0
 
 
@@ -85,8 +83,8 @@ def test_get_verb():
     assert query.count() > 0
 
 
-def test_get_specific_verb():
-    """Should query for specific verbs"""
+def test_get_specific_verb_type():
+    """Should query for specific verb types"""
     query = query_builder.get_query_for_category(models.Verb, "tran")
     assert query.count() > 0
     query = query_builder.get_query_for_category(models.Verb, "intran")

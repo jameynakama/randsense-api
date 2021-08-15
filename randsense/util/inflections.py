@@ -41,7 +41,8 @@ def inflect(sentence):
     # 4. add any special punctuation
     sentence = add_punctuation(sentence)
 
-    inflected_sentence = [word.get("inflected", word["base"])
+    inflected_sentence = [word.get("inflected", word.get(word["attributes"]["base"],
+                                                         word["base"]))
                           for word in sentence.base]
 
     return inflected_sentence
