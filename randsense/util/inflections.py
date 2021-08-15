@@ -41,9 +41,7 @@ def inflect(sentence):
     # 4. add any special punctuation
     sentence = add_punctuation(sentence)
 
-    inflected_sentence = [word.get("inflected",
-                                   word.get(word["inflections"].get("base", False),
-                                            word["base"]))
+    inflected_sentence = [word.get("inflected", word.get("inflections").get("base", word["base"]))
                           for word in sentence.base]
 
     return inflected_sentence
@@ -184,8 +182,9 @@ def do_verb(subject, verb, is_plural):
 
 
 def conjugate_for_present(subject, verb, is_plural):
+    verb_to_inflect = verb["inflections"]["base"]
     if is_plural:
-        return verb["inflections"]["base"]
+        return verb_to_inflect
     else:
         if subject["base"] not in [
             "i",
@@ -193,36 +192,37 @@ def conjugate_for_present(subject, verb, is_plural):
             "we",
             "they",
         ]:
-            if verb["inflections"]["pres3s"]:
+            if verb["inflections"].get("pres3s"):
                 return verb["inflections"]["pres3s"]
             else:
-                if verb["base"][-1] == "y" and verb.base[-2:] != "ey":
-                    return verb["base"][:-1] + "ies"
-                elif verb["base"][-1] == "x":
-                    return verb["base"] + "es"
-                elif verb["base"][-2:] in ["sh", "ch", "ss"]:
-                    return verb["base"] + "es"
+                if verb_to_inflect[-1] == "y" and verb_to_inflect[-2:] != "ey":
+                    return verb_to_inflect[:-1] + "ies"
+                elif verb_to_inflect[-1] == "x":
+                    return verb_to_inflect + "es"
+                elif verb_to_inflect[-2:] in ["sh", "ch", "ss"]:
+                    return verb_to_inflect + "es"
                 else:
-                    return verb["base"] + "s"
+                    return verb_to_inflect + "s"
         else:
-            return verb["base"]
+            return verb_to_inflect
 
 
 def conjugate_for_simple_past(verb):
+    verb_to_inflect = verb["inflections"]["base"]
     if verb["inflections"].get("past"):
         return verb["inflections"]["past"]
     else:
-        if verb["base"][-1] == "e":
-            return verb.base + "d"
-        elif verb["base"][-2:] in [
+        if verb_to_inflect[-1] == "e":
+            return verb_to_inflect + "d"
+        elif verb_to_inflect[-2:] in [
             "ey",
             "ay",
         ]:
-            return verb["base"] + "ed"
-        elif verb["base"][-1] == "y":
-            return verb["base"][:-1] + "ied"
+            return verb_to_inflect + "ed"
+        elif verb_to_inflect[-1] == "y":
+            return verb_to_inflect[:-1] + "ied"
         else:
-            return verb["base"] + "ed"
+            return verb_to_inflect + "ed"
 
 
 def conjugate_for_be(subject, tense, is_plural):
